@@ -12,9 +12,9 @@ object MemoryRepository : TaskRepository {
     private var taskList = mutableListOf<Task>()
 
     init {
-        saveTask(Task(0L, Calendar.getInstance().time, "Caminhar na costa.", false))
-        saveTask(Task(0L, Calendar.getInstance().time, "Banho de mar.", false))
-        saveTask(Task(0L, Calendar.getInstance().time, "Jogar futebol.", false))
+        saveTask(Task(0L, Calendar.getInstance().time, "Tarefa 1.", false))
+        saveTask(Task(0L, Calendar.getInstance().time, "Tarefa 2.", false))
+        saveTask(Task(0L, Calendar.getInstance().time, "Tarefa 3.", false))
     }
 
     override fun saveTask(task: Task) {

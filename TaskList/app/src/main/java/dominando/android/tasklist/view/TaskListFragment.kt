@@ -10,6 +10,7 @@ import dominando.android.tasklist.MemoryRepository
 
 import dominando.android.tasklist.R
 import dominando.android.tasklist.adapters.TaskListAdapter
+import dominando.android.tasklist.hideKeyboard
 import dominando.android.tasklist.interfaces.TaskView
 import dominando.android.tasklist.model.Task
 import dominando.android.tasklist.presenter.TaskPresenter
@@ -18,11 +19,9 @@ import java.util.*
 
 class TaskListFragment : Fragment(), TaskView {
     private val presenter = TaskPresenter(this, MemoryRepository)
-    lateinit var taskAdapter: TaskListAdapter
+    private lateinit var taskAdapter: TaskListAdapter
 
-    override fun markAsDone() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun markAsDone() {}
 
     override fun onTaskAdded(position: Int) {
         recyclerTaskList.smoothScrollToPosition(position)
@@ -43,10 +42,8 @@ class TaskListFragment : Fragment(), TaskView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         presenter.fetch()
-
-        fabAddTask.setOnClickListener {
-            presenter.add(Task(0L, Calendar.getInstance().time, "Nova tarefa.", false))
-        }
+        setupButton()
+        textNewTask.clearFocus()
 
         super.onViewCreated(view, savedInstanceState)
     }
@@ -57,6 +54,20 @@ class TaskListFragment : Fragment(), TaskView {
         recyclerTaskList.apply {
             this.adapter = taskAdapter
             this.layoutManager = layoutManager
+        }
+    }
+
+    private fun setupButton() {
+        fabAddTask.setOnClickListener {
+            if (textNewTask.text.isNotEmpty() && textNewTask.text.isNotBlank()) {
+                val taskDescription = textNewTask.text.toString()
+                val task = Task(0L, Calendar.getInstance().time, taskDescription, false)
+
+                presenter.add(task)
+                textNewTask.text.clear()
+                textNewTask.clearFocus()
+                hideKeyboard(activity as MainActivity, textNewTask.rootView)
+            }
         }
     }
 }

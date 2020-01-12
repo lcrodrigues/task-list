@@ -1,6 +1,5 @@
 package dominando.android.tasklist.presenter
 
-import android.util.Log
 import dominando.android.tasklist.interfaces.AddTaskListener
 import dominando.android.tasklist.interfaces.SearchTaskListener
 import dominando.android.tasklist.interfaces.TaskRepository
