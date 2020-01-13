@@ -24,6 +24,14 @@ class TaskPresenter(
         })
     }
 
+    fun remove(position: Int) {
+       repository.removeTask(position, object : RemoveTaskListener {
+           override fun onRemovedTask() {
+                view.onTaskRemoved(position)
+           }
+       })
+    }
+
     fun fetch() {
         repository.fetchTasks(object : SearchTaskListener {
             override fun onTasksFetched(result: List<Task>) {

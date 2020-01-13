@@ -1,9 +1,6 @@
 package dominando.android.tasklist
 
-import dominando.android.tasklist.interfaces.AddTaskListener
-import dominando.android.tasklist.interfaces.MarkTaskListener
-import dominando.android.tasklist.interfaces.SearchTaskListener
-import dominando.android.tasklist.interfaces.TaskRepository
+import dominando.android.tasklist.interfaces.*
 import dominando.android.tasklist.model.Task
 import java.util.*
 
@@ -45,6 +42,11 @@ object MemoryRepository : TaskRepository {
         saveTask(markedTask)
 
         listener.onMarkedTask()
+    }
+
+    override fun removeTask(position: Int, listener: RemoveTaskListener) {
+        taskList.removeAt(position)
+        listener.onRemovedTask()
     }
 
     override fun fetchTasks(listener: SearchTaskListener) {

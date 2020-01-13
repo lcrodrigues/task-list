@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dominando.android.tasklist.MemoryRepository
 
 import dominando.android.tasklist.R
@@ -28,6 +30,10 @@ class TaskListFragment : Fragment(), TaskView {
     override fun onTaskAdded(position: Int) {
         recyclerTaskList.smoothScrollToPosition(position)
         taskAdapter.notifyItemInserted(position)
+    }
+
+    override fun onTaskRemoved(position: Int) {
+        taskAdapter.notifyItemRemoved(position)
     }
 
     override fun showTasks(result: List<Task>) {
@@ -57,6 +63,28 @@ class TaskListFragment : Fragment(), TaskView {
             this.adapter = taskAdapter
             this.layoutManager = layoutManager
         }
+
+        setSwipeGesture()
+    }
+
+    private fun setSwipeGesture() {
+        val swipe = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                presenter.remove(position)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(swipe)
+        itemTouchHelper.attachToRecyclerView(recyclerTaskList)
     }
 
     private fun setupButton() {
