@@ -11,4 +11,5 @@
   <color name="primaryAccentColor">#fb8c00</color>
 
   <color name="cellBackground">#fff59d</color>
+  <color name="disableCell">#33000000</color>
 </resources>

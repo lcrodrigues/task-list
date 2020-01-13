@@ -1,6 +1,7 @@
 package dominando.android.tasklist
 
 import dominando.android.tasklist.interfaces.AddTaskListener
+import dominando.android.tasklist.interfaces.MarkTaskListener
 import dominando.android.tasklist.interfaces.SearchTaskListener
 import dominando.android.tasklist.interfaces.TaskRepository
 import dominando.android.tasklist.model.Task
@@ -18,13 +19,13 @@ object MemoryRepository : TaskRepository {
     }
 
     override fun saveTask(task: Task) {
-        if(task.id == 0L) {
+        if (task.id == 0L) {
             task.id = nextId++
             taskList.add(task)
         } else {
             val index = taskList.indexOfFirst { it.id == task.id }
 
-            if(index > -1) {
+            if (index > -1) {
                 taskList[index] = task
             } else {
                 taskList.add(task)
@@ -38,8 +39,15 @@ object MemoryRepository : TaskRepository {
         listener.onAddTask(taskList.lastIndex)
     }
 
+    override fun markTask(position: Int, isDone: Boolean, listener: MarkTaskListener) {
+        val markedTask = taskList[position]
+        markedTask.isDone = isDone
+        saveTask(markedTask)
+
+        listener.onMarkedTask()
+    }
+
     override fun fetchTasks(listener: SearchTaskListener) {
         listener.onTasksFetched(taskList)
     }
-
 }

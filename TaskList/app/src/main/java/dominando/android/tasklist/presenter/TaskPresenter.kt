@@ -1,20 +1,25 @@
 package dominando.android.tasklist.presenter
 
-import dominando.android.tasklist.interfaces.AddTaskListener
-import dominando.android.tasklist.interfaces.SearchTaskListener
-import dominando.android.tasklist.interfaces.TaskRepository
-import dominando.android.tasklist.interfaces.TaskView
+import dominando.android.tasklist.interfaces.*
 import dominando.android.tasklist.model.Task
 
 class TaskPresenter(
     val view: TaskView,
-    val repository: TaskRepository
+    private val repository: TaskRepository
 ) {
 
     fun add(task: Task) {
         repository.addNewTask(task, object : AddTaskListener {
             override fun onAddTask(position: Int) {
                 view.onTaskAdded(position)
+            }
+        })
+    }
+
+    fun mark(position: Int, isDone: Boolean) {
+        repository.markTask(position, isDone, object : MarkTaskListener {
+            override fun onMarkedTask() {
+                view.markAsDone(position)
             }
         })
     }

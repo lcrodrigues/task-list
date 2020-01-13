@@ -21,7 +21,9 @@ class TaskListFragment : Fragment(), TaskView {
     private val presenter = TaskPresenter(this, MemoryRepository)
     private lateinit var taskAdapter: TaskListAdapter
 
-    override fun markAsDone() {}
+    override fun markAsDone(position: Int) {
+        taskAdapter.notifyItemChanged(position)
+    }
 
     override fun onTaskAdded(position: Int) {
         recyclerTaskList.smoothScrollToPosition(position)
@@ -29,7 +31,7 @@ class TaskListFragment : Fragment(), TaskView {
     }
 
     override fun showTasks(result: List<Task>) {
-        taskAdapter = TaskListAdapter(result)
+        taskAdapter = TaskListAdapter(result, this::markTask)
         initRecyclerView()
     }
 
@@ -69,5 +71,9 @@ class TaskListFragment : Fragment(), TaskView {
                 hideKeyboard(activity as MainActivity, textNewTask.rootView)
             }
         }
+    }
+
+    private fun markTask(position: Int, isDone: Boolean) {
+        presenter.mark(position, isDone)
     }
 }
